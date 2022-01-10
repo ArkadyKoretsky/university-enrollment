@@ -22,7 +22,7 @@ export class UniversityService {
       id: 3,
       name: 'Hebrew University',
       maxNumberOfStudents: 2500,
-      currentNumberOfStudents: 2499,
+      currentNumberOfStudents: 2500,
       minGpa: 88.4,
     },
   ];
