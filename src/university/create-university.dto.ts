@@ -1,4 +1,4 @@
-export class University {
+export class CreateUniversityDto {
   id: number;
   name: string;
   maxNumberOfStudents: number;

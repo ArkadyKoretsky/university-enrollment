@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { Student } from './student.dto';
+import { CreateStudentDto } from './create-student.dto';
 import { StudentService } from './student.service';
 
 @Controller()
@@ -8,14 +8,14 @@ export class StudentController {
 
   // creates new student
   @Post('student')
-  createStudent(@Body() student: Student): number {
-    return this.studentService.createStudent(student);
+  createStudent(@Body() createStudentDto: CreateStudentDto): number {
+    return this.studentService.createStudent(createStudentDto);
   }
 
   // get list of students of specific university (by given id)
   @Get('students/:universityId')
-  getStudents(@Param('universityId') id: number): Student[] {
-    return this.studentService.getStudents(id);
+  getStudents(@Param('universityId') universityId: number): CreateStudentDto[] {
+    return this.studentService.getStudents(universityId);
   }
 
   // enroll student to university under specific conditions

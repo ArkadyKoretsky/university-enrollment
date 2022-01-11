@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { University } from 'src/university/university.dto';
+import { CreateUniversityDto } from 'src/university/create-university.dto';
 import { UniversityService } from 'src/university/university.service';
-import { Student } from './student.dto';
+import { CreateStudentDto } from './create-student.dto';
 
 @Injectable()
 export class StudentService {
@@ -9,7 +9,7 @@ export class StudentService {
   // to get university by id
   constructor(private universityService: UniversityService) {}
 
-  private readonly students: Student[] = [
+  private readonly students: CreateStudentDto[] = [
     {
       studentId: 1,
       universityId: 1,
@@ -34,27 +34,27 @@ export class StudentService {
 
   // create new student in db and calculate his/hers gpa
   // by given array
-  createStudent(student: Student): number {
-    student.studentId = this.students.length + 1;
-    student.universityId = null;
-    student.gpa =
-      student.grades.reduce(
+  createStudent(createStudentDto: CreateStudentDto): number {
+    createStudentDto.studentId = this.students.length + 1;
+    createStudentDto.universityId = null;
+    createStudentDto.gpa =
+      createStudentDto.grades.reduce(
         (sumOfGrades, currentCourse) => sumOfGrades + currentCourse['grade'],
         0,
-      ) / student.grades.length;
-    this.students.push(student);
+      ) / createStudentDto.grades.length;
+    this.students.push(createStudentDto);
     return this.students[this.students.length - 1].studentId;
   }
 
   // enroll student to university (by given id)
   // if he/she meets the university conditions (min gpa and max capacity does'nt reached)
   enrollStudent(studentId: number, universityId: number): string {
-    const university: University =
+    const university: CreateUniversityDto =
       this.universityService.getUniversity(universityId);
     if (university === null || university === undefined)
       return 'There is no such university! Please create it first!';
 
-    const student: Student = this.students[studentId - 1];
+    const student: CreateStudentDto = this.students[studentId - 1];
     if (student === null || student === undefined)
       return 'There is no such student! Please create him/her first!';
 
@@ -76,7 +76,9 @@ export class StudentService {
   }
 
   // return all students that belong to specific university (by give id)
-  getStudents(id: number): Student[] {
-    return this.students.filter((student) => student.universityId == id);
+  getStudents(universityId: number): CreateStudentDto[] {
+    return this.students.filter(
+      (student) => student.universityId == universityId,
+    );
   }
 }

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { University } from './university.dto';
+import { CreateUniversityDto } from './create-university.dto';
 
 @Injectable()
 export class UniversityService {
-  private readonly universities: University[] = [
+  private readonly universities: CreateUniversityDto[] = [
     {
       id: 1,
       name: 'Open University',
@@ -28,20 +28,20 @@ export class UniversityService {
   ];
 
   // get university by id
-  getUniversity(id: number): University {
-    return this.universities[id - 1];
+  getUniversity(universityId: number): CreateUniversityDto {
+    return this.universities[universityId - 1];
   }
 
   // create new university with the given data
   // the id generated with auto increment
-  createUniversity(university: University): number {
-    university.id = this.universities.length + 1;
-    this.universities.push(university);
+  createUniversity(createUniversityDto: CreateUniversityDto): number {
+    createUniversityDto.id = this.universities.length + 1;
+    this.universities.push(createUniversityDto);
     return this.universities[this.universities.length - 1].id;
   }
 
   // updates the current capacity of the university after student enrollment
-  updateCurrentCapacity(id: number): void {
-    this.universities[id - 1].currentNumberOfStudents++;
+  updateCurrentCapacity(universityId: number): void {
+    this.universities[universityId - 1].currentNumberOfStudents++;
   }
 }
