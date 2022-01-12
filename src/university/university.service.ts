@@ -38,9 +38,9 @@ export class UniversityService implements OnModuleInit {
         .sort({ _id: -1 })
         .limit(1)
         .exec();
-    }
+      createUniversityDto._id = universityWithGreatestId[0]._id + 1;
+    } else createUniversityDto._id = 1; // the first university added to the collection
     this.totalNumberOfUniversities++;
-    createUniversityDto._id = this.totalNumberOfUniversities;
     createUniversityDto.currentNumberOfStudents = 0;
     const createdUniversity = new this.universityModel(createUniversityDto);
     await createdUniversity.save();

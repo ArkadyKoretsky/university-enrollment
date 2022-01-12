@@ -34,9 +34,9 @@ export class StudentService implements OnModuleInit {
         .sort({ _id: -1 })
         .limit(1)
         .exec();
-    }
+      createStudentDto._id = studentWithGreatestId[0]._id + 1;
+    } else createStudentDto._id = 1; // the first student added to the collection
     this.totalNumberOfStudents++;
-    createStudentDto._id = this.totalNumberOfStudents;
     createStudentDto.universityId = null;
     createStudentDto.gpa =
       createStudentDto.grades.reduce(

@@ -9,13 +9,13 @@ export class UniversityController {
 
   // get university data by given id
   @Get(':id')
-  async getUniversity(@Param('id') universityId: number): Promise<University> {
+  getUniversity(@Param('id') universityId: number): Promise<University> {
     return this.universityService.getUniversity(universityId);
   }
 
   // create new university
   @Post()
-  async createUniversity(
+  createUniversity(
     @Body() createUniversityDto: CreateUniversityDto,
   ): Promise<number> {
     return this.universityService.createUniversity(createUniversityDto);
@@ -23,7 +23,7 @@ export class UniversityController {
 
   // for debug purpose
   @Put(':id')
-  async updateCapacity(@Param('id') universityId: number): Promise<University> {
+  updateCapacity(@Param('id') universityId: number): Promise<University> {
     return this.universityService.updateCurrentCapacity(universityId);
   }
 }

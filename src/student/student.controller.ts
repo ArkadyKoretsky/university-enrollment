@@ -19,7 +19,7 @@ export class StudentController {
     return this.studentService.getStudents(universityId);
   }
 
-  //enroll student to university under specific conditions
+  // enroll student to university under specific conditions
   @Post('enroll/:studentId/:universityId')
   enrollStudent(
     @Param('studentId') studentId: number,
