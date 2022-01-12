@@ -1,38 +1,21 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# Universities and Students Enrolling API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This is a small REST API implementing some queries about students data and universities data.<br/>
+The API implemented in NestJS with mongoose.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Please read the whole README before running the app.
 
 ## Installation
+
+Clone this repo and run:
 
 ```bash
 $ npm install
 ```
 
 ## Running the app
+
+To run the server, run one of these commands:
 
 ```bash
 # development
@@ -45,29 +28,37 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
+The server will run locally on port 3000.
 
-```bash
-# unit tests
-$ npm run test
+To check the requests (with Postman for example) the global URI should be this:<br/>
+http://localhost:3000/api
 
-# e2e tests
-$ npm run test:e2e
+Concatenate to this URI the requested endpoints.
 
-# test coverage
-$ npm run test:cov
-```
+## GET Methods
 
-## Support
+No need to pass anything in body.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+The IDs both university ID and student ID represented as natural integer numbers (starting from 1).
 
-## Stay in touch
+Each endpoint that includes {universityId} or {studentId} replace with actual number at the URI.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## POST Methods
 
-## License
+Some of the POST methods require passing json object at the body.
 
-Nest is [MIT licensed](LICENSE).
+For university creation you <b>must</b> pass the fields: name, maxNumberOfStudents and minGpa.
+
+For student creation you <b>must</b> pass the fields: name and array of grades. Each grade is a json object that has the fields: courseName and grade.
+
+For both of the cases the document won't be created if you will not pass the mentioned fields.<br/>
+
+## Data Base
+
+The data base is MongoDB and stored in cloud through the Atlas service.<br/>
+No need to install Mongo locally.<br/>
+You can install only the Compass software if you wish to see the whole data base.
+
+You might notice that each document contains more fields than requested, don't worry about not passing them at the body.<br/>
+These fields created at the server side and serves mostly student enrolling.<br/>
+The \_id field generated by regular counting and serves as the student\university ID.
