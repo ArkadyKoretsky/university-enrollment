@@ -1,7 +1,7 @@
 import { CourseGrade } from './course-grade.class';
 
 export class CreateStudentDto {
-  studentId: number;
+  _id: number;
   universityId: number;
   name: string;
   grades: CourseGrade[];

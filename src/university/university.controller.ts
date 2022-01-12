@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { CreateUniversityDto } from './create-university.dto';
+import { University } from './university.schema';
 import { UniversityService } from './university.service';
 
 @Controller('university')
@@ -8,13 +9,21 @@ export class UniversityController {
 
   // get university data by given id
   @Get(':id')
-  getUniversity(@Param('id') universityId: number): CreateUniversityDto {
+  async getUniversity(@Param('id') universityId: number): Promise<University> {
     return this.universityService.getUniversity(universityId);
   }
 
   // create new university
   @Post()
-  createUniversity(@Body() createUniversityDto: CreateUniversityDto): number {
+  async createUniversity(
+    @Body() createUniversityDto: CreateUniversityDto,
+  ): Promise<number> {
     return this.universityService.createUniversity(createUniversityDto);
+  }
+
+  // for debug purpose
+  @Put(':id')
+  async updateCapacity(@Param('id') universityId: number): Promise<University> {
+    return this.universityService.updateCurrentCapacity(universityId);
   }
 }

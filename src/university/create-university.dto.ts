@@ -1,5 +1,5 @@
 export class CreateUniversityDto {
-  id: number;
+  _id: number;
   name: string;
   maxNumberOfStudents: number;
   currentNumberOfStudents: number;

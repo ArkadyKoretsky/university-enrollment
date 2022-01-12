@@ -1,47 +1,58 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { CreateUniversityDto } from './create-university.dto';
+import { University, UniversityDocument } from './university.schema';
 
 @Injectable()
-export class UniversityService {
-  private readonly universities: CreateUniversityDto[] = [
-    {
-      id: 1,
-      name: 'Open University',
-      maxNumberOfStudents: 2000,
-      currentNumberOfStudents: 1000,
-      minGpa: 85.4,
-    },
-    {
-      id: 2,
-      name: 'Haifa University',
-      maxNumberOfStudents: 1000,
-      currentNumberOfStudents: 999,
-      minGpa: 82.6,
-    },
-    {
-      id: 3,
-      name: 'Hebrew University',
-      maxNumberOfStudents: 2500,
-      currentNumberOfStudents: 2500,
-      minGpa: 88.4,
-    },
-  ];
+export class UniversityService implements OnModuleInit {
+  private totalNumberOfUniversities: number; // check if the collection is empty on startup
+
+  constructor(
+    @InjectModel(University.name)
+    private universityModel: Model<UniversityDocument>,
+  ) {}
+
+  // to check only once if the collection is empty
+  // and not each time when creating new university
+  async onModuleInit(): Promise<void> {
+    this.totalNumberOfUniversities = await this.universityModel
+      .countDocuments()
+      .exec();
+  }
 
   // get university by id
-  getUniversity(universityId: number): CreateUniversityDto {
-    return this.universities[universityId - 1];
+  async getUniversity(universityId: number): Promise<University> {
+    return this.universityModel.findById(universityId).exec();
   }
 
   // create new university with the given data
   // the id generated with auto increment
-  createUniversity(createUniversityDto: CreateUniversityDto): number {
-    createUniversityDto.id = this.universities.length + 1;
-    this.universities.push(createUniversityDto);
-    return this.universities[this.universities.length - 1].id;
+  async createUniversity(
+    createUniversityDto: CreateUniversityDto,
+  ): Promise<number> {
+    // find the greatest id (last university added) if the collection is not empty
+    if (this.totalNumberOfUniversities > 0) {
+      const universityWithGreatestId = await this.universityModel
+        .find()
+        .sort({ _id: -1 })
+        .limit(1)
+        .exec();
+    }
+    this.totalNumberOfUniversities++;
+    createUniversityDto._id = this.totalNumberOfUniversities;
+    createUniversityDto.currentNumberOfStudents = 0;
+    const createdUniversity = new this.universityModel(createUniversityDto);
+    await createdUniversity.save();
+    return createUniversityDto._id;
   }
 
   // updates the current capacity of the university after student enrollment
-  updateCurrentCapacity(universityId: number): void {
-    this.universities[universityId - 1].currentNumberOfStudents++;
+  async updateCurrentCapacity(universityId: number): Promise<University> {
+    let university = await this.getUniversity(universityId);
+    university.currentNumberOfStudents++;
+    return this.universityModel.findByIdAndUpdate(universityId, {
+      currentNumberOfStudents: university.currentNumberOfStudents,
+    });
   }
 }

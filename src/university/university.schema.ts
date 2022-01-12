@@ -3,10 +3,10 @@ import { Document } from 'mongoose';
 
 export type UniversityDocument = University & Document;
 
-@Schema()
+@Schema({ versionKey: false })
 export class University {
   @Prop()
-  id: number;
+  _id: number;
 
   @Prop({ required: true })
   name: string;

@@ -4,10 +4,10 @@ import { CourseGrade } from './course-grade.class';
 
 export type StudentDocument = Student & Document;
 
-@Schema()
+@Schema({ versionKey: false })
 export class Student {
   @Prop()
-  studentId: number;
+  _id: number;
 
   @Prop()
   universityId: number;
